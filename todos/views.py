@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 # Create your views here.
+from django.core.paginator import Paginator
 from models import Todo
 def index(request):
-    todos = Todo.objects.all()[:10]
+    todos = Todo.objects.all()
     context = {
         'todos':todos
     }
@@ -14,3 +14,19 @@ def index(request):
         return render(request,'index.html',context)
     else:
         return render(request,'index.html',context)
+
+def show_completed(request):
+    todos = Todo.objects.filter(completed=True)
+    context = {
+        'todos': todos
+    }
+    return render(request, 'index.html', context)
+
+def show_active(request):
+    todos = Todo.objects.filter(completed=False)
+    context = {
+        'todos': todos
+    }
+    return render(request, 'index.html', context)
+def clear_completed(request):
+    pass
