@@ -2,6 +2,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.core.paginator import Paginator
 from models import Todo
+import pdb;
 def index(request):
     todos = Todo.objects.all()
     context = {
@@ -29,4 +30,17 @@ def show_active(request):
     }
     return render(request, 'index.html', context)
 def clear_completed(request):
-    pass
+    Todo.objects.filter(completed=True).delete()
+    todos = Todo.objects.all()
+    context = {
+        'todos': todos
+    }
+    return render(request, 'index.html', context)
+
+def save_state(request):
+    if request.method == 'POST':
+        title = request.POST.get('todo_title', '')
+        checked = request.POST.get('checked', '')
+        todo = Todo.objects.get(title=title)
+        todo.completed = checked
+        todo.save()

@@ -11,19 +11,20 @@
     <input type="text" name="title" id="title"/>
     <input type="submit" value="submit" />
 </form>
-<form method="post" action="{% url 'index' %}">
-    {% csrf_token %}
-    <input type="submit" value="ClearCompleted" />
-</form>
 <hr>
 <br>
+<form method="post" action="{% url 'save_state'%}">
+{% csrf_token %}
 <ul>{% for todo in todos %}
-    <li> {{ todo.title }}   </li>
+    <li>  <input type="checkbox" id="{{ todo.title }}"name="{{ todo.title }}" value=" " {% if todo.completed is True %} checked = "checked" {% endif %} >{{ todo.title }}   </li>
 {% endfor %}
 </ul>
-<a href="/show_all">All</a>
-<a href="/active">Active</a>
-<a href="/completed">Completed</a>
-<a href="/clear_completed">ClearCompleted</a>
+ <input type="submit" value="Submit">
+</form>
+<a href="/todos/">All</a>
+<a href="/todos/active">Active</a>
+<a href="/todos/completed">Completed</a>
+<a href="/todos/clear_completed">ClearCompleted</a>
+
 </body>
 </html>
