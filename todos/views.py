@@ -1,8 +1,8 @@
 from django.shortcuts import render
 # Create your views here.
 from django.core.paginator import Paginator
-from models import Todo
-import pdb;
+from django.http import HttpResponseRedirect
+from .models import Todo
 def index(request):
     todos = Todo.objects.all()
     context = {
@@ -39,8 +39,12 @@ def clear_completed(request):
 
 def save_state(request):
     if request.method == 'POST':
-        title = request.POST.get('todo_title', '')
-        checked = request.POST.get('checked', '')
-        todo = Todo.objects.get(title=title)
-        todo.completed = checked
-        todo.save()
+        titles = dict(request.POST).keys()
+        for title in Todo.objects.filter(title__in=titles):
+            title.completed = True
+            title.save()
+        for title in Todo.objects.exclude(title__in=titles):
+            title.completed = False
+            title.save()
+    
+    return HttpResponseRedirect('/todos')
