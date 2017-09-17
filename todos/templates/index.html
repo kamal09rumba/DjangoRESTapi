@@ -5,7 +5,7 @@
     <title>Todo Indexpage</title>
 </head>
 <body>
-<h1>|{{ points }}|</h1>
+<h1>{{ full_name }} is Logged In</h1>
 <h3>Todo List:</h3><hr>
 <form method="post" action="{% url 'index' %}">
     {% csrf_token %}
@@ -27,6 +27,7 @@
 <a href="/todos/active">Active</a>
 <a href="/todos/completed">Completed</a>
 <a href="/todos/clear_completed">ClearCompleted</a>
-
+<hr>
+click <a href="/accounts/logout/">here</a> to logout
 </body>
 </html>

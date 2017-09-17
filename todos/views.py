@@ -4,10 +4,8 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from .models import Todo
 from django.http import HttpResponse
-from django.contrib.auth import (
-authenticate,get_user_model,login,logout
-)
-from forms import UserLoginForm
+from django.contrib import auth
+
 
 def index(request):
     todos = Todo.objects.all()
@@ -62,7 +60,6 @@ def search(request):
         language = request.COOKIES['lang']
     if 'lang' in request.session:
         session_language = request.session['lang']
-
     return render(request,'search.html',{'language':language,'session_language':session_language})
 
 
@@ -73,9 +70,26 @@ def language(request,language='en-gb'):
     request.session['lang'] = language
     return response
 
+def login(request):
+    return render(request,'login.html')
+
+def auth_view(request):
+    username = request.POST.get('username',''),
+    password = request.POST.get('password',''),
+    print request.POST
+    user = auth.authenticate(username=username, password=password)  #returns user object if match else None
+    if user is not None:
+        auth.login(request, user)  #make user status as logged in now using django login function
+        return HttpResponseRedirect('/todos')
+    else:
+        return HttpResponseRedirect('/accounts/invalid')
 
 
+def loggedin(request):
+    return render(request,'index.html',{'full_name': request.user.username})
 
-
-
-
+def invalid_login(request):
+    return render(request,'invalid_login.html')
+def logout(request):
+    auth.logout(request)
+    return render(request,'logout.html')
