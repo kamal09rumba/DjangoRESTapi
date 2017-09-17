@@ -74,9 +74,11 @@ def login(request):
     return render(request,'login.html')
 
 def auth_view(request):
-    username = request.POST.get('username',''),
-    password = request.POST.get('password',''),
+    username = request.POST.get('username','')   #pass the post value 'username' else if not present give empty string ''
+    password = request.POST.get('password','')
     print request.POST
+    print username
+    print password
     user = auth.authenticate(username=username, password=password)  #returns user object if match else None
     if user is not None:
         auth.login(request, user)  #make user status as logged in now using django login function
