@@ -3,6 +3,12 @@ from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from .models import Todo
+from django.http import HttpResponse
+from django.contrib.auth import (
+authenticate,get_user_model,login,logout
+)
+from forms import UserLoginForm
+
 def index(request):
     todos = Todo.objects.all()
     context = {
@@ -45,6 +51,31 @@ def save_state(request):
             title.save()
         for title in Todo.objects.exclude(title__in=titles):
             title.completed = False
+
             title.save()
-    
     return HttpResponseRedirect('/todos')
+
+def search(request):
+    language='uni-NEP'
+    session_language='en-gb'
+    if 'lang' in request.COOKIES:
+        language = request.COOKIES['lang']
+    if 'lang' in request.session:
+        session_language = request.session['lang']
+
+    return render(request,'search.html',{'language':language,'session_language':session_language})
+
+
+def language(request,language='en-gb'):
+    ##language setter
+    response=HttpResponse("settign language to %s " % language)
+    response.set_cookie('lang', language)
+    request.session['lang'] = language
+    return response
+
+
+
+
+
+
+

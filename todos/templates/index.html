@@ -5,6 +5,7 @@
     <title>Todo Indexpage</title>
 </head>
 <body>
+<h1>|{{ points }}|</h1>
 <h3>Todo List:</h3><hr>
 <form method="post" action="{% url 'index' %}">
     {% csrf_token %}
@@ -15,8 +16,9 @@
 <br>
 <form method="post" action="{% url 'save_state'%}">
 {% csrf_token %}
-<ul>{% for todo in todos %}
-    <li>  <input type="checkbox" id="{{ todo.title }}"name="{{ todo.title }}" value=" " {% if todo.completed is True %} checked = "checked" {% endif %} >{{ todo.title }}   </li>
+<ul>
+{% for todo in todos %}
+<li>  <input type="checkbox" id="{{ todo.title }}" name="{{ todo.title }}" value=" " {% if todo.completed is True %} checked = "checked" {% endif %} >{{ todo.title }}   </li>
 {% endfor %}
 </ul>
  <input type="submit" value="Submit">

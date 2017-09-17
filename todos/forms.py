@@ -6,3 +6,6 @@ class TodoForm(forms.ModelForm):
         model = Todo
         fields = ('title','completed')
 # wysiwyg
+class UserLoginForm(forms.Form):
+    username = forms.CharField()
+    password=forms.CharField(widget=forms.PasswordInput)
