@@ -6,7 +6,9 @@
     <title>Todo Indexpage</title>
 </head>
 <body>
-
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
 <h3>Todo List:</h3><hr>
 {% if not request.user.is_authenticated  %}
     Please login to view the content <hr>
@@ -14,7 +16,7 @@ click <a href="/accounts/login">here</a> to login <br>
 click <a href="/signup">here</a> to signup
 {% endif %}
 {% if request.user.is_authenticated %}
-    <h1>{{ uname }} is Logged In</h1>
+    <h1>{{ uname }}</h1>
 <form method="post" action="{% url 'index' %}">
     {% csrf_token %}
     <input type="text" name="title" id="title"/>
@@ -38,5 +40,6 @@ click <a href="/signup">here</a> to signup
 <hr>
 click <a href="/accounts/logout/">here</a> to logout
 {% endif %}
+    </div></div></div>
 </body>
 </html>
