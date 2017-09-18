@@ -98,7 +98,9 @@ def invalid_login(request):
 
 def logout(request):
     auth.logout(request)
-    return render(request,'logout.html')
+    return HttpResponseRedirect('/todos')
+
+    #return render(request,'logout.html')
 
 def signup(request):
     template_name = 'signup.html'
