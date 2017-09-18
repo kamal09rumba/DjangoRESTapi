@@ -1,6 +1,8 @@
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <meta charset="UTF-8">
     <title>SignUp</title>
 </head>
@@ -8,7 +10,7 @@
 <form action="" method="post">
         {% csrf_token %}
         <table>
-        {{ registrationForm.as_p}}
+        {{ registrationForm|crispy}}
         </table>
         <input type="submit" value="Submit" />
     </form>

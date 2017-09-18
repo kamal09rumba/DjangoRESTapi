@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'invoices.apps.InvoicesConfig',
-    'todos'
+    'todos',
+    'crispy_forms',
 
 ]
 
