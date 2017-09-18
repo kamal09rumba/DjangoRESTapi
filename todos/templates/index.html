@@ -5,8 +5,13 @@
     <title>Todo Indexpage</title>
 </head>
 <body>
-<h1>{{ full_name }} is Logged In</h1>
+
 <h3>Todo List:</h3><hr>
+{% if not request.user.is_authenticated  %}
+    Please login to view the content
+{% endif %}
+{% if request.user.is_authenticated %}
+    <h1>{{ uname }} is Logged In</h1>
 <form method="post" action="{% url 'index' %}">
     {% csrf_token %}
     <input type="text" name="title" id="title"/>
@@ -18,7 +23,7 @@
 {% csrf_token %}
 <ul>
 {% for todo in todos %}
-<li>  <input type="checkbox" id="{{ todo.title }}" name="{{ todo.title }}" value=" " {% if todo.completed is True %} checked = "checked" {% endif %} >{{ todo.title }}   </li>
+<li>  <input type="checkbox" id="{{ todo.title }}" name="{{ todo.title }}" value="" {% if todo.completed is True %} checked = "checked" {% endif %} >{{ todo.title }}   </li>
 {% endfor %}
 </ul>
  <input type="submit" value="Submit">
@@ -29,5 +34,6 @@
 <a href="/todos/clear_completed">ClearCompleted</a>
 <hr>
 click <a href="/accounts/logout/">here</a> to logout
+{% endif %}
 </body>
 </html>

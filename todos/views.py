@@ -5,11 +5,14 @@ from django.http import HttpResponseRedirect
 from .models import Todo
 from django.http import HttpResponse
 from django.contrib import auth
+from forms import UserForm
 
 
 def index(request):
     todos = Todo.objects.all()
+    uname = request.session.get('uname')
     context = {
+        'uname':uname,
         'todos':todos
     }
     if request.method == 'POST':
@@ -42,6 +45,7 @@ def clear_completed(request):
     return render(request, 'index.html', context)
 
 def save_state(request):
+    print request.POST
     if request.method == 'POST':
         titles = dict(request.POST).keys()
         for title in Todo.objects.filter(title__in=titles):
@@ -49,7 +53,6 @@ def save_state(request):
             title.save()
         for title in Todo.objects.exclude(title__in=titles):
             title.completed = False
-
             title.save()
     return HttpResponseRedirect('/todos')
 
@@ -74,8 +77,9 @@ def login(request):
     return render(request,'login.html')
 
 def auth_view(request):
-    username = request.POST.get('username','')   #pass the post value 'username' else if not present give empty string ''
+    username = request.POST.get('username','')  #pass the post value 'username' else if not present give empty string ''
     password = request.POST.get('password','')
+    request.session['uname'] = username
     print request.POST
     print username
     print password
@@ -86,12 +90,25 @@ def auth_view(request):
     else:
         return HttpResponseRedirect('/accounts/invalid')
 
-
 def loggedin(request):
     return render(request,'index.html',{'full_name': request.user.username})
 
 def invalid_login(request):
     return render(request,'invalid_login.html')
+
 def logout(request):
     auth.logout(request)
     return render(request,'logout.html')
+
+def signup(request):
+    template_name = 'signup.html'
+    registrationForm = UserForm(request.POST or None)
+    context = {"registrationForm": registrationForm}
+    if registrationForm.is_valid():
+        user = registrationForm.save(commit=False)
+        password = registrationForm.cleaned_data.get('password')
+        user.set_password(password)
+        user.save()
+        auth.login(request,user)
+        return HttpResponseRedirect('/todos')
+    return render(request, template_name, context)

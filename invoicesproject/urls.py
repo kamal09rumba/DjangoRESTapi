@@ -11,5 +11,6 @@ urlpatterns = [
      url(r'^accounts/logout/$', todos.views.logout, name='logout'),
      url(r'^accounts/loggedin/$',todos.views.loggedin, name='loggedin'),
      url(r'^accounts/invalid/$', todos.views.invalid_login, name='invalid_login'),
+     url(r'^signup/$',todos.views.signup,name='signup'),
 
 ]
