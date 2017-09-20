@@ -9,44 +9,48 @@ from forms import UserForm
 
 
 def index(request):
-    todos = Todo.objects.all()
+    print request.POST
     uname = request.session.get('uname')
+    todos = Todo.objects.filter(author=uname)
     context = {
-        'uname':uname,
-        'todos':todos
+        'uname': uname,
+        'todos': todos
     }
     if request.method == 'POST':
-        title = request.POST['title']
-        todo = Todo(title=title)
+        print request.POST
+        title = request.POST.get('title','')
+        author = request.POST.get('author','')
+        todo = Todo(title=title,author=author)
         todo.save()
         return render(request,'index.html',context)
     else:
         return render(request,'index.html',context)
 
 def show_completed(request):
-    todos = Todo.objects.filter(completed=True)
+    uname = request.session.get('uname')
+    todos = Todo.objects.filter(completed=True,author=uname)
     context = {
         'todos': todos
     }
     return render(request, 'index.html', context)
 
 def show_active(request):
-    todos = Todo.objects.filter(completed=False)
+    uname = request.session.get('uname')
+    todos = Todo.objects.filter(completed=False,author=uname)
     context = {
         'todos': todos
     }
     return render(request, 'index.html', context)
 def clear_completed(request):
-    Todo.objects.filter(completed=True).delete()
+    uname = request.session.get('uname')
+    Todo.objects.filter(completed=True,author=uname).delete()
     todos = Todo.objects.all()
-    context = {
-        'todos': todos
-    }
-    return render(request, 'index.html', context)
+    return render(request, 'index.html')
 
 def save_state(request):
     print request.POST
     if request.method == 'POST':
+        uname = request.session.get('uname')
         titles = dict(request.POST).keys()
         for title in Todo.objects.filter(title__in=titles):
             title.completed = True
