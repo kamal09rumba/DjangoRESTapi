@@ -11,6 +11,7 @@ from forms import UserForm
 def index(request):
     print request.POST
     uname = request.session.get('uname')
+    # uname2=request.user.username
     todos = Todo.objects.filter(author=uname)
     context = {
         'uname': uname,
@@ -44,8 +45,7 @@ def show_active(request):
 def clear_completed(request):
     uname = request.session.get('uname')
     Todo.objects.filter(completed=True,author=uname).delete()
-    todos = Todo.objects.all()
-    return render(request, 'index.html')
+    return HttpResponseRedirect('/todos')
 
 def save_state(request):
     print request.POST
