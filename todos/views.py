@@ -17,6 +17,11 @@ def index(request):
         'uname': uname,
         'todos': todos
     }
+    # for key in request.session.keys():
+    #     print  request.session[key]
+    ## print all session key values
+    for key, value in request.session.items(): print('{} => {}'.format(key, value))
+    #print request.session.items()
     if request.method == 'POST':
         print request.POST
         title = request.POST.get('title','')
