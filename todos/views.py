@@ -47,23 +47,23 @@ def show_active(request):
         'todos': todos
     }
     return render(request, 'index.html', context)
+
 def clear_completed(request):
     uname = request.session.get('uname')
     Todo.objects.filter(completed=True,author=uname).delete()
     return HttpResponseRedirect('/todos')
 
 def save_state(request):
-    print request.POST
     if request.method == 'POST':
-        uname = request.session.get('uname')
-        titles = dict(request.POST).keys()
-        for title in Todo.objects.filter(title__in=titles):
-            title.completed = True
+        uname  = request.session.get('uname')
+        check  = request.POST['check'] # post value either true or false
+        titles = request.POST['todo_title']# post value i.e. name of title
+    for title in Todo.objects.filter(title=titles):
+        # return HttpResponse(title.title)
+            title.completed = check.title() # title() capitalizes first letter of string
             title.save()
-        for title in Todo.objects.exclude(title__in=titles):
-            title.completed = False
-            title.save()
-    return HttpResponseRedirect('/todos')
+    return HttpResponse('saved')
+
 
 def search(request):
     language='uni-NEP'
@@ -123,3 +123,5 @@ def signup(request):
         auth.login(request,user)
         return HttpResponseRedirect('/todos')
     return render(request, template_name, context)
+
+

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <title>Todo Indexpage</title>
 </head>
 <body>
@@ -25,21 +26,21 @@ click <a href="/signup">here</a> to signup
 </form>
 <hr>
 <br>
+
 <form method="post" action="{% url 'save_state'%}">
 {% csrf_token %}
 <ul>
-
-
 {% for todo in todos %}
-
-<li>  <input type="checkbox" id="{{ todo.title }}" name="{{ todo.title }}" value=""
+<li>
+    <input class="testCheck" type="checkbox" id="{{ todo.title }}" name="{{ todo.title }}" value=""
          {% if todo.completed is True %} checked = "checked"
-         {% endif %} >{{ todo.title }}   </li>
+         {% endif %} >   {{ todo.title }}
+</li>
 {% endfor %}
-
 </ul>
  <input type="submit" value="Submit">
 </form>
+
 <a href="/todos/">All </a>|
 <a href="/todos/active">Active </a>|
 <a href="/todos/completed">Completed </a>|
@@ -48,5 +49,29 @@ click <a href="/signup">here</a> to signup
 click <a href="/accounts/logout/">here</a> to logout
 {% endif %}
     </div></div></div>
+
+<script>
+    $(document).ready(function()
+    {
+        var data = [];
+        $('.testCheck').click(function()
+        {
+            var check = $(this).is(':checked');
+            var todo_title =  $(this).attr('name');
+            $.ajax
+            ({
+                url: "{% url 'save_state'%}",
+                type: 'post',
+                data: {check: check, todo_title: todo_title, csrfmiddlewaretoken: "{{ csrf_token }}"},
+                success: function(html)
+                {
+                    console.log(html);
+                }
+
+            });
+        });
+    });
+</script>
+
 </body>
 </html>
